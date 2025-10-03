@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"fmt"
 	"log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -8,8 +9,11 @@ import (
 
 var DB *gorm.DB
 
-func DatabaseConnection() {
-	dsn := "host=localhost user=postgres dbname=taskhub_db port=5432 sslmode=disable"
+func DatabaseConnection(host, user, password, dbname, port, sslmode string) {
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		host, user, password, dbname, port, sslmode,
+	)
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -17,4 +21,8 @@ func DatabaseConnection() {
 	}
 
 	DB = database
+
+	var dbName string
+	DB.Raw("SELECT current_database()").Scan(&dbName)
+	log.Println("📌 Connected to database:", dbName)
 }
