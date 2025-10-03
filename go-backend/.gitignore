@@ -1,0 +1,50 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Build directories
+/bin/
+/build/
+/dist/
+
+# Go module files (vendor can be ignored if you want)
+vendor/
+
+# Dependency directories
+# Go modules cache (optional)
+Gopkg.lock
+Gopkg.toml
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Environment files (if you have DB passwords, etc.)
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+coverage.out
+*.coverprofile
+
+# Generated files (optional)
+*.pb.go
+*.gen.go
+
+# Node.js dependencies (if using frontend with Gin)
+node_modules/
