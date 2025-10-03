@@ -22,7 +22,7 @@ func main() {
 		os.Getenv("DB_PORT"),
     os.Getenv("DB_SSLMODE"),
   )
-  // connection.MigrationStart()
+  connection.MigrationStart()
 
   router := gin.Default()
   router.GET("/ping", func(c *gin.Context) {

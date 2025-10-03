@@ -10,10 +10,18 @@ import (
 var DB *gorm.DB
 
 func DatabaseConnection(host, user, password, dbname, port, sslmode string) {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-		host, user, password, dbname, port, sslmode,
-	)
+	var dsn string
+	if password == "" {
+		dsn = fmt.Sprintf(
+			"host=%s user=%s dbname=%s port=%s sslmode=%s",
+			host, user, dbname, port, sslmode,
+		)
+	} else {
+		dsn = fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+			host, user, password, dbname, port, sslmode,
+		)
+	}
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
