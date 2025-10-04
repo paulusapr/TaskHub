@@ -36,6 +36,7 @@ Thumbs.db
 # Environment files (if you have DB passwords, etc.)
 .env
 .env.local
+.env.production
 .env.*.local
 
 # Coverage reports
