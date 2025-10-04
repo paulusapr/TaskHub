@@ -5,6 +5,7 @@ import (
   "log"
 	"github.com/gin-gonic/gin"
 	"gin-quickstart/connection"
+  "gin-quickstart/routes"
   "github.com/joho/godotenv"
 )
 
@@ -25,10 +26,6 @@ func main() {
   connection.MigrationStart()
 
   router := gin.Default()
-  router.GET("/ping", func(c *gin.Context) {
-    c.JSON(200, gin.H{
-      "message": "pong",
-    })
-  })
+  routes.SetupRoutes(router)
   router.Run(":3001")
 }
