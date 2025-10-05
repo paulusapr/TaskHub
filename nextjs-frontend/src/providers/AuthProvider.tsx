@@ -8,7 +8,7 @@ import React, {
 	useEffect,
 } from 'react';
 import { Loader } from '@/components/Loader';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 type AuthTypes = {
 	isLoading: boolean;
@@ -25,6 +25,7 @@ const AuthProvider = ({children}: {children?: ReactNode | ReactElement}) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [token, setToken] = useState<string>('');
     const router = useRouter();
+	const pathName = usePathname();
 
     const setLogin = (token: string) => {
         setToken(token);
@@ -40,7 +41,7 @@ const AuthProvider = ({children}: {children?: ReactNode | ReactElement}) => {
     useEffect(() => {
         const localToken = localStorage.getItem('token');
         if (!localToken && !token) {
-            router.push('/login');
+			if (pathName !== '/register') router.push('/login');
         } else {
             setToken(localToken || token);
         }

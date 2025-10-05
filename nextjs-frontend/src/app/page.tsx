@@ -8,7 +8,7 @@ export default function Home() {
   const { getListOfTask, task, loading } = TaskHooks(token);
 
   useEffect(() => {
-    getListOfTask();
+    if (token) getListOfTask();
   }, []);
 
   return (
