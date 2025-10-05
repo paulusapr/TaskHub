@@ -10,10 +10,10 @@ func SetupTaskRoutes(router *gin.Engine) {
 	taskGroup := router.Group("/tasks")
 	taskGroup.Use(middleware.JWTMiddleware())
 	{
-		taskGroup.GET("/", controllers.GetAllTask)
-		taskGroup.GET("/:id", controllers.GetTaskByID)
-		taskGroup.POST("/", controllers.CreateTask)
-		taskGroup.PUT("/:id", controllers.UpdateTask)
-		taskGroup.DELETE("/:id", controllers.DeleteTask)
+		taskGroup.GET("/all", controllers.GetAllTask)
+		taskGroup.GET("/single/:id", controllers.GetTaskByID)
+		taskGroup.POST("/create", controllers.CreateTask)
+		taskGroup.PUT("/update/:id", controllers.UpdateTask)
+		taskGroup.DELETE("/delete/:id", controllers.DeleteTask)
 	}
 }

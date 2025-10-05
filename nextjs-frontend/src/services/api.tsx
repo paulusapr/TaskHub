@@ -32,6 +32,7 @@ export const put = (props: RequestType) => {
 };
 
 export const remove = (props: RequestType) => {
-	const {url} = props;
-	return axios.delete(API_BASE_URL+url);
+	const {url, params} = props;
+	const headers = getHeader(props);
+	return axios.delete(API_BASE_URL+url, {headers, params});
 };

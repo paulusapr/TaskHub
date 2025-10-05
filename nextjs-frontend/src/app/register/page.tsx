@@ -32,7 +32,7 @@ const RegisterPage = () => {
                             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                                  <input
                                     className="border border-gray-300 rounded-sm p-2"
-                                    type="name"
+                                    type="text"
                                     name="name"
                                     placeholder="Name"
                                     value={values.name}
@@ -40,7 +40,7 @@ const RegisterPage = () => {
                                 />
                                 <input
                                     className="border border-gray-300 rounded-sm p-2"
-                                    type="email"
+                                    type="text"
                                     name="email"
                                     placeholder="Email"
                                     value={values.email}
