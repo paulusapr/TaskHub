@@ -3,10 +3,12 @@ package main
 import (
   "os"
   "log"
+  "time"
 	"github.com/gin-gonic/gin"
 	"gin-quickstart/connection"
   "gin-quickstart/routes"
   "github.com/joho/godotenv"
+  "github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -26,6 +28,16 @@ func main() {
   connection.MigrationStart()
 
   router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{os.Getenv("ORIGIN_URL")},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
   routes.SetupRoutes(router)
   router.Run(":3001")
 }

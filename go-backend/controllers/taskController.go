@@ -122,3 +122,25 @@ func DeleteTask(c *gin.Context) {
 		"message": "Delete task success",
 	})
 }
+
+func GetTaskByID(c *gin.Context) {
+	taskID := c.Param("id")
+
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "User not found"})
+		return
+	}
+
+	u := user.(*models.User)
+	var task models.Task
+	if err := connection.DB.Where("id = ? AND user_id = ?", taskID, u.ID).First(&task).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Get task success",
+		"data": task,
+	})
+}
