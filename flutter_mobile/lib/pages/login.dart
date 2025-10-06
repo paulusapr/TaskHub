@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
+import '../services/store.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,14 +16,17 @@ class _LoginPageState extends State<LoginPage> {
   bool _loading = false;
 
   void _handleLogin() async {
+    final store = StoreService();
     setState(() => _loading = true);
 
     try {
-      final result = await ApiService.login(
+      final result = await AuthService.login(
         _emailController.text,
         _passwordController.text,
       );
       final successMessage = result['message'];
+      final tokenAccess = result['token'];
+      store.storeToken(tokenAccess);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

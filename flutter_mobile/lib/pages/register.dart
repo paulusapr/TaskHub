@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _loading = true);
 
     try {
-      final result = await ApiService.register(
+      final result = await AuthService.register(
         _nameController.text,
         _emailController.text,
         _passwordController.text,

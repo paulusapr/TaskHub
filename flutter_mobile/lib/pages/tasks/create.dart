@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../services/store.dart';
+import '../../services/task.dart';
 
 class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -19,69 +12,118 @@ class CreateTaskPage extends StatefulWidget {
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  int _counter = 0;
+  final store = StoreService();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  bool _loading = false;
+
+  void _logout() async {
+    store.removeToken();
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  void _handleCreate() async {
+    setState(() => _loading = true);
+
+    try {
+      final result = await TaskService.createTask(
+        _titleController.text,
+      );
+      final successMessage = result['message'];
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(successMessage),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } on Exception catch (e) {
+      final errorMessage = 'Something went wrong';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() => _loading = false);
+    } finally {
+      _formKey.currentState?.reset();
+      _titleController.clear();
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() => _loading = false);
+        Navigator.pushReplacementNamed(context, '/home');
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () => _logout(),
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Stack(
+        children: [
+          if (_loading)
+            const Center(
+              child: CircularProgressIndicator(),
             ),
-          ],
-        ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 25.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 16,
+                  children: [
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                          labelText: 'Title',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          )
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Enter Title';
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        child: const Text('Submit'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _handleCreate();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../config/app.dart';
 
-class ApiService {
-  static String baseUrl = 'http://10.0.2.2:3001';
+class AuthService {
+  static String baseUrl = AppConfig.baseUrl;
 
   static Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
@@ -12,7 +13,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final result = jsonDecode(response.body);
+      return result;
     } else {
       throw Exception('Something went wrong');
     }
