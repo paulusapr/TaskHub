@@ -1,6 +1,6 @@
 This is a Fullstack project with mobile and web applications
 
-## Getting Started
+# Getting Started
 clone the project using
 ```bash
 git clone https://github.com/paulusapr/TaskHub.git
