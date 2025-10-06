@@ -13,7 +13,7 @@ cd TaskHub
 # How to run
 
 * Go Backend
-Don't forget to prepare the database and update the env file
+- Don't forget to prepare the database and update the env file
 ```bash
 cd go-backend
 
@@ -25,7 +25,7 @@ make run
 ```
 
 * NextJS Frontend
-Don't forget to update the env file
+- Don't forget to update the env file
 ```bash
 cd nextjs-frontend
 
@@ -37,7 +37,7 @@ npm run dev
 ```
 
 * Flutter Mobile
-Don't forget to update lib/config/app.dart
+- Don't forget to update lib/config/app.dart
 ```bash
 cd flutter_mobile
 
@@ -56,9 +56,9 @@ Open Android Studio
 # open
 flutter_mobile directory
 
-#start
-Emulators
+#run
+Start the Emulators
 
 #start
-Project
+Press Start at the top of Android Studio
 ```
