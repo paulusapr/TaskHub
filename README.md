@@ -12,8 +12,8 @@ cd TaskHub
 
 # How to run
 
-* Go Backend
-- Don't forget to prepare the database and update the env file
+## Go Backend
+* Don't forget to prepare the database and update the env file
 ```bash
 cd go-backend
 
@@ -24,8 +24,8 @@ go tidy
 make run
 ```
 
-* NextJS Frontend
-- Don't forget to update the env file
+## NextJS Frontend
+* Don't forget to update the env file
 ```bash
 cd nextjs-frontend
 
@@ -36,8 +36,8 @@ npm install
 npm run dev
 ```
 
-* Flutter Mobile
-- Don't forget to update lib/config/app.dart
+## Flutter Mobile
+* Don't forget to update lib/config/app.dart
 ```bash
 cd flutter_mobile
 
