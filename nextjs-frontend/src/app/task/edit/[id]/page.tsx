@@ -1,11 +1,17 @@
 "use client";
 import React, { useEffect } from "react";
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import TaskHooks from "@/services/taskHooks";
 import { useAuthProvider } from "@/providers/AuthProvider";
 import { useRouter, useParams } from "next/navigation";
 import { Loader } from "@/components/Loader";
 import { Status } from "@/services/enum";
+
+const EditTaskSchema = Yup.object().shape({
+   title: Yup.string().required('Required'),
+   status: Yup.string().required('Required'),
+ });
 
 const EditTaskPage = () => {
     const { token } = useAuthProvider();
@@ -43,21 +49,25 @@ const EditTaskPage = () => {
                 <div className="w-full flex flex-col">
                     <Formik
                         initialValues={{ title: singleTask?.title ?? '', status: singleTask?.status ?? 'To Do' }}
+                        validationSchema={EditTaskSchema}
                         onSubmit={(values, { resetForm }) => {
                             onSubmit(values);
                             resetForm();
                         }}
                     >
-                        {({ values, handleChange, handleSubmit }) => (
+                        {({ values, handleChange, handleSubmit, errors, touched }) => (
                             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                                  <input
-                                    className="border border-gray-300 rounded-sm p-2"
+                                    className={`border ${errors.title ? 'border-red-700' : 'border-gray-300'} rounded-sm p-2`}
                                     type="text"
                                     name="title"
                                     placeholder="Name"
                                     value={values.title}
                                     onChange={handleChange}
                                 />
+                                {errors.title && touched.title ? (
+                                    <span className="text-red-700">{errors.title}</span>
+                                ) : null}
                                 <select
                                   className="border border-gray-300 rounded-sm p-2 w-full"
                                   name="status"
